@@ -24,6 +24,8 @@ class CareerController extends Controller
     }
 
     public function add(Request $request_) {
+        date_default_timezone_set("Europe/Istanbul");
+
         $tempArray = [];
         $file = $this->getJsonFile();
 
@@ -32,10 +34,10 @@ class CareerController extends Controller
         $fileUpload    = $request_->file('file')->storeAs('public/career/files/', $fileName . '.' . $fileExtension);
 
         $tempArray = [
-            "id"      => $fileName,
-            "name"    => $request_->name,
-            "surname" => $request_->surname,
-            "email"   => $request_->email,
+            "id"      => (int)$fileName,
+            "name"    => ucwords($request_->name),
+            "surname" => strtoupper($request_->surname),
+            "email"   => strtolower($request_->email),
             "phone"   => $request_->phone,
             "message" => $request_->message,
             "file"    => base_path('storage/app/public/career/files/') . $fileName . '.' . $fileExtension,
@@ -44,7 +46,7 @@ class CareerController extends Controller
 
         array_push($file, $tempArray);
 
-        if(file_put_contents(base_path('storage/app/public/career/career.json'), json_encode($file))) 
+        if(file_put_contents(base_path('storage/app/public/career/career.json'), json_encode($file, JSON_PRETTY_PRINT))) 
             return response()->json([
                 'status' => 'success',
                 'result' => true
@@ -54,7 +56,5 @@ class CareerController extends Controller
                 'status' => 'failed',
                 'result' => false
             ], 500);
-
-        echo json_encode($tempArray);
     }
 }

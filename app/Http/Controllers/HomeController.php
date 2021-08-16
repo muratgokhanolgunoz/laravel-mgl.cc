@@ -42,13 +42,13 @@ class HomeController extends Controller
         }
 
         $result = [
-            'photo' => $activePhoto,
-            'color' => $homeJsonFile->colors[$currentDayNumberInWeek]->color,
-            'timezone' => $languageJsonFile->timezone,
-            'currentDayNumberInWeek' => $currentDayNumberInWeek,
+            'photo'                   => $activePhoto,
+            'color'                   => $homeJsonFile->colors[$currentDayNumberInWeek]->color,
+            'timezone'                => $languageJsonFile->timezone,
+            'currentDayNumberInWeek'  => $currentDayNumberInWeek,
             'currentDayNumberInMonth' => $currentDayNumberInMonth,
-            'currentMonth' => $currentMonth,
-            'currentWeek' => date('W') 
+            'currentMonth'            => $currentMonth,
+            'currentWeek'             => date('W') 
         ];
             
         return response()->json([
