@@ -94,4 +94,11 @@ class HomeController extends Controller
 
         file_put_contents(base_path('storage/app/public/home/home.json'), json_encode($jsonFile, JSON_PRETTY_PRINT));
     }
+
+    public function asd() {
+        $ip = "94.55.209.135";
+        $ipInfo = file_get_contents('http://ip-api.com/json/' . $ip);
+        $ipInfo = json_decode($ipInfo);
+        echo json_encode($ipInfo);
+    }
 }

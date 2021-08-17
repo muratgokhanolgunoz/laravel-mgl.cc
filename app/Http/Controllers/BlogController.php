@@ -15,53 +15,53 @@ class BlogController extends Controller
     }
 
     public function getJsonFile($language_) {
-        $file = json_decode(file_get_contents(base_path('storage/app/public/language/' . $language_ . '/' . $language_ . '.json')));
+        $file = json_decode(file_get_contents(base_path('storage/app/public/blog/' . $language_ . '.json')));
         return $file;
     }
 
     public function index($language_) {
-        $languageFile = $this->getJsonFile($language_);
+        $jsonFile = $this->getJsonFile($language_);
         return response()->json([
             'status' => 'success',
-            'result' => $languageFile->blog->body->items
+            'result' => $jsonFile
         ], 200);
     }
 
     public function add(Request $request_, $language_) {
-        $languageFile = $this->getJsonFile($language_);
+        $jsonFile = $this->getJsonFile($language_);
 
         $fileName = date('YmdHis');
 
         $thumbnailName      = $fileName . '_thumbnail';
         $thumbnailExtension = $request_->file('thumbnail')->getClientOriginalExtension();
-        $thumbnailUpload    = $request_->file('thumbnail')->storeAs('public/blog/' . $fileName, $thumbnailName . '.' . $thumbnailExtension);
+        $thumbnailUpload    = $request_->file('thumbnail')->storeAs('public/blog/files/' . $fileName, $thumbnailName . '.' . $thumbnailExtension);
 
         $photoName      = $fileName . '_photo';
         $photoExtension = $request_->file('photo')->getClientOriginalExtension();
-        $photoUpload    = $request_->file('photo')->storeAs('public/blog/' . $fileName, $photoName . '.' . $photoExtension);
+        $photoUpload    = $request_->file('photo')->storeAs('public/blog/files/' . $fileName, $photoName . '.' . $photoExtension);
 
         $summaryName      = $fileName . '_summary';
         $summaryExtension = $request_->file('summary')->getClientOriginalExtension();
-        $summaryUpload    = $request_->file('summary')->storeAs('public/blog/' . $fileName, $summaryName . '.' . $summaryExtension);
+        $summaryUpload    = $request_->file('summary')->storeAs('public/blog/files/' . $fileName, $summaryName . '.' . $summaryExtension);
 
         $articleName      = $fileName . '_article';
         $articleExtension = $request_->file('article')->getClientOriginalExtension();
-        $articleUpload    = $request_->file('article')->storeAs('public/blog/' . $fileName, $articleName . '.' . $articleExtension);
+        $articleUpload    = $request_->file('article')->storeAs('public/blog/files/' . $fileName, $articleName . '.' . $articleExtension);
 
         $tempArray = [
             'BLOG_SECTION_ITEMS_ID'        => (int)$fileName,
-            'BLOG_SECTION_ITEMS_THUMBNAIL' => base_path('storage/app/public/blog/') . $fileName . '/' . $thumbnailName . '.' . $thumbnailExtension,
-            'BLOG_SECTION_ITEMS_PHOTO'     => base_path('storage/app/public/blog/') . $fileName . '/' . $photoName . '.' . $photoExtension,
+            'BLOG_SECTION_ITEMS_THUMBNAIL' => base_path('storage/app/public/blog/files/') . $fileName . '/' . $thumbnailName . '.' . $thumbnailExtension,
+            'BLOG_SECTION_ITEMS_PHOTO'     => base_path('storage/app/public/blog/files/') . $fileName . '/' . $photoName . '.' . $photoExtension,
             'BLOG_SECTION_ITEMS_TITLE'     => $request_->title,
-            'BLOG_SECTION_ITEMS_SUMMARY'   => base_path('storage/app/public/blog/') . $fileName . '/' . $summaryName . '.' . $summaryExtension,
-            'BLOG_SECTION_ITEMS_FULL_TEXT' => base_path('storage/app/public/blog/') . $fileName . '/' . $articleName . '.' . $articleExtension,
+            'BLOG_SECTION_ITEMS_SUMMARY'   => base_path('storage/app/public/blog/files/') . $fileName . '/' . $summaryName . '.' . $summaryExtension,
+            'BLOG_SECTION_ITEMS_ARTICLE' => base_path('storage/app/public/blog/files/') . $fileName . '/' . $articleName . '.' . $articleExtension,
             'BLOG_SECTION_ITEMS_DATE'      => date("Y-m-d H:i:s"),
             'BLOG_SECTION_ITEMS_AUTHOR'    => $request_->author
         ];
 
-        array_push($languageFile->blog->body->items, $tempArray);
+        array_push($jsonFile, $tempArray);
 
-        if(file_put_contents(base_path('storage/app/public/language/' . $language_ . '/' . $language_ . '.json'), json_encode($languageFile, JSON_PRETTY_PRINT))) 
+        if(file_put_contents(base_path('storage/app/public/blog/' . $language_ . '.json'), json_encode($jsonFile, JSON_PRETTY_PRINT ))) 
             return response()->json([
                 'status' => 'success',
                 'result' => true
@@ -75,9 +75,9 @@ class BlogController extends Controller
 
     public function delete(Request $request_, $language_) {
         $tempArray = [];
-        $languageFile  = $this->getJsonFile($language_);
-        $blogItems = $languageFile->blog->body->items;
-        $languageFile->blog->body->items = [];
+        $jsonFile  = $this->getJsonFile($language_);
+        $blogItems = $jsonFile;
+        $jsonFile = [];
                 
         foreach ($blogItems as $key => $value) {
             if($request_->id != $value->BLOG_SECTION_ITEMS_ID) {
@@ -87,23 +87,23 @@ class BlogController extends Controller
                     'BLOG_SECTION_ITEMS_PHOTO'     => $value->BLOG_SECTION_ITEMS_PHOTO,
                     'BLOG_SECTION_ITEMS_TITLE'     => $value->BLOG_SECTION_ITEMS_TITLE,
                     'BLOG_SECTION_ITEMS_SUMMARY'   => $value->BLOG_SECTION_ITEMS_SUMMARY,
-                    'BLOG_SECTION_ITEMS_FULL_TEXT' => $value->BLOG_SECTION_ITEMS_FULL_TEXT,
+                    'BLOG_SECTION_ITEMS_ARTICLE'   => $value->BLOG_SECTION_ITEMS_ARTICLE,
                     'BLOG_SECTION_ITEMS_DATE'      => $value->BLOG_SECTION_ITEMS_DATE,
                     'BLOG_SECTION_ITEMS_AUTHOR'    => $value->BLOG_SECTION_ITEMS_AUTHOR
                 ];
 
-                array_push($languageFile->blog->body->items, $tempArray);
+                array_push($jsonFile, $tempArray);
                 $tempArray = [];
             } else {
-                unlink(base_path('storage/app/public/blog/' . $value->BLOG_SECTION_ITEMS_ID . '/' . $value->BLOG_SECTION_ITEMS_ID . '_thumbnail.jpg'));
-                unlink(base_path('storage/app/public/blog/' . $value->BLOG_SECTION_ITEMS_ID . '/' . $value->BLOG_SECTION_ITEMS_ID . '_photo.jpg'));
-                unlink(base_path('storage/app/public/blog/' . $value->BLOG_SECTION_ITEMS_ID . '/' . $value->BLOG_SECTION_ITEMS_ID . '_summary.rtf'));
-                unlink(base_path('storage/app/public/blog/' . $value->BLOG_SECTION_ITEMS_ID . '/' . $value->BLOG_SECTION_ITEMS_ID . '_article.rtf'));
-                rmdir(base_path('storage/app/public/blog/'  . $value->BLOG_SECTION_ITEMS_ID));
+                unlink(base_path('storage/app/public/blog/files/' . $value->BLOG_SECTION_ITEMS_ID . '/' . $value->BLOG_SECTION_ITEMS_ID . '_thumbnail.jpg'));
+                unlink(base_path('storage/app/public/blog/files/' . $value->BLOG_SECTION_ITEMS_ID . '/' . $value->BLOG_SECTION_ITEMS_ID . '_photo.jpg'));
+                unlink(base_path('storage/app/public/blog/files/' . $value->BLOG_SECTION_ITEMS_ID . '/' . $value->BLOG_SECTION_ITEMS_ID . '_summary.rtf'));
+                unlink(base_path('storage/app/public/blog/files/' . $value->BLOG_SECTION_ITEMS_ID . '/' . $value->BLOG_SECTION_ITEMS_ID . '_article.rtf'));
+                rmdir(base_path('storage/app/public/blog/files/'  . $value->BLOG_SECTION_ITEMS_ID));
             }            
         }          
 
-        if(file_put_contents(base_path('storage/app/public/language/' . $language_ . '/' . $language_ . '.json'), json_encode($languageFile, JSON_PRETTY_PRINT))) 
+        if(file_put_contents(base_path('storage/app/public/blog/' . $language_ . '.json'), json_encode($jsonFile, JSON_PRETTY_PRINT))) 
             return response()->json([
                 'status' => 'success',
                 'result' => true
