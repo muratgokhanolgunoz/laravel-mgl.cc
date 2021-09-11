@@ -11,20 +11,27 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 class HomeController extends Controller
 {
     private function getHomeJsonFile() {
-        $file = json_decode(file_get_contents(base_path('storage/app/public/home/home.json')));
-        return $file;
+        return json_decode(file_get_contents(public_path('assets/uploads/home/home.json')));
     }
 
-    private function getLanguageJsonFile($language_) {
-        $file = json_decode(file_get_contents(base_path('storage/app/public/language/' . $language_ . '/' . $language_ . '.json')));
-        return $file; 
+    public function userLogs() {
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $time = date('d.m.Y H:i:s') . " UTC";
+        $data = "";
+
+        $file = fopen(public_path('assets/uploads/user_logs.txt'), "a+") or die("Unable to open file !");
+        $data = $data . "[ " . $time . " ] [ " . $ip . "] [ " . $userAgent . " ] \n";
+        $data = $data . "------------------------------------------------------- \n";
+        fwrite($file, $data);        
+        fclose($file);
     }
 
-    public function index($language_) {
-        $languageJsonFile = $this->getLanguageJsonFile($language_);
+    public function index($language_) { 
+        $timezone = $this->getLocationTimezoneOnIp();      
         $homeJsonFile = $this->getHomeJsonFile();
-
-        date_default_timezone_set($languageJsonFile->timezone);
+        
+        date_default_timezone_set($timezone);
 
         // 1 (Monday) , 7 (Sunday)
         $currentDayNumberInWeek = date('N');
@@ -44,7 +51,7 @@ class HomeController extends Controller
         $result = [
             'photo'                   => $activePhoto,
             'color'                   => $homeJsonFile->colors[$currentDayNumberInWeek]->color,
-            'timezone'                => $languageJsonFile->timezone,
+            'timezone'                => $timezone,
             'currentDayNumberInWeek'  => $currentDayNumberInWeek,
             'currentDayNumberInMonth' => $currentDayNumberInMonth,
             'currentMonth'            => $currentMonth,
@@ -69,7 +76,7 @@ class HomeController extends Controller
         else 
             $jsonFile->photos->weekdays[rand(0, count($jsonFile->photos->weekdays) - 1)]->active = true;  
 
-        if(file_put_contents(base_path('storage/app/public/home/home.json'), json_encode($jsonFile, JSON_PRETTY_PRINT)) == TRUE)
+        if(file_put_contents(public_path('assets/uploads/home/home.json'), json_encode($jsonFile, JSON_PRETTY_PRINT)) == TRUE)
             return response()->json([
                 'status' => 'success',
                 'result' => true
@@ -92,13 +99,15 @@ class HomeController extends Controller
             $value->active = false;
         }
 
-        file_put_contents(base_path('storage/app/public/home/home.json'), json_encode($jsonFile, JSON_PRETTY_PRINT));
+        file_put_contents(public_path('assets/uploads/home/home.json'), json_encode($jsonFile, JSON_PRETTY_PRINT));
     }
 
-    public function asd() {
-        $ip = "94.55.209.135";
+    private function getLocationTimezoneOnIp() {        
+        $ip = '94.55.209.135';
+        // $ip = $_SERVER['REMOTE_ADDR'];
         $ipInfo = file_get_contents('http://ip-api.com/json/' . $ip);
         $ipInfo = json_decode($ipInfo);
-        echo json_encode($ipInfo);
+    
+        return $ipInfo->timezone;
     }
 }
