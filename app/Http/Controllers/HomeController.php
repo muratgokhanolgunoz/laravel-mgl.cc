@@ -27,7 +27,8 @@ class HomeController extends Controller
         fclose($file);
     }
 
-    public function index($language_) { 
+    public function index() { 
+        $activePhoto= "";
         $timezone = $this->getLocationTimezoneOnIp();      
         $homeJsonFile = $this->getHomeJsonFile();
         

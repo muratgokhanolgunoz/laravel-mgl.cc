@@ -35,7 +35,7 @@ class CareerController extends Controller
             'email'   => strtolower($request_->email),
             'phone'   => $request_->phone,
             'message' => $request_->message,
-            'file'    => public_path('assets/uploads/career/files/') . $fileName . '.' . $fileExtension,
+            'file'    => 'http://localhost:8000/assets/uploads/career/files/' . $fileName . '.' . $fileExtension,
             'date'    => date('Y-m-d H:i:s')
         ];
 

@@ -6,7 +6,7 @@
         "email": "gokhanolgunoz@gmail.com",
         "phone": "+90 (532) 219 63 16",
         "message": null,
-        "file": "C:\\Users\\murat\\Desktop\\mgl\\laravel-midas-global-logistic\\public\\assets\/uploads\/career\/files\/20210903111104.pdf",
+        "file": "http://localhost:8000/assets\/uploads\/career\/files\/20210903111104.pdf",
         "date": "2021-09-03 11:11:04"
     },
     {
@@ -16,7 +16,7 @@
         "email": "asd@asd.com",
         "phone": "asdasd",
         "message": null,
-        "file": "C:\\Users\\murat\\Desktop\\mgl\\laravel-midas-global-logistic\\public\\assets\/uploads\/career\/files\/20210903134351.pdf",
+        "file": "http://localhost:8000/assets\/uploads\/career\/files\/20210903134351.pdf",
         "date": "2021-09-03 13:43:51"
     },
     {
@@ -26,7 +26,17 @@
         "email": "asd@asd.com",
         "phone": "asdasd",
         "message": "asd",
-        "file": "C:\\Users\\murat\\Desktop\\mgl\\laravel-midas-global-logistic\\public\\assets\/uploads\/career\/files\/20210903135452.pdf",
+        "file": "http://localhost:8000/assets\/uploads\/career\/files\/20210903135452.pdf",
         "date": "2021-09-03 13:54:52"
+    },
+    {
+        "id": 20210912132341,
+        "name": "Hakan",
+        "surname": "OLGUN\u00f6Z",
+        "email": "holgunoz@gmail.com",
+        "phone": "+90 (532) 219 63 16",
+        "message": null,
+        "file": "http://localhost:8000/assets\/uploads\/career\/files\/20210912132341.pdf",
+        "date": "2021-09-12 13:23:41"
     }
 ]
