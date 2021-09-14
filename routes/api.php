@@ -23,6 +23,7 @@ Route::post('/blog/{language}/add', [BlogController::class, 'add'])->where('lang
 Route::post('/blog/{language}/delete', [BlogController::class, 'delete'])->where('language', '[a-z]+');
 Route::post('/career/add', [CareerController::class, 'add']);
 Route::get('/blog/{language}', [BlogController::class, 'index'])->where('language', '[a-z]+');
+Route::get('/blog/{language}/{id}', [BlogController::class, 'getSelectedBlog'])->where(['language' => '[a-z]+', 'id' => '[0-9]+']);
 Route::get('/career', [CareerController::class, 'index']);
 Route::get('/home/select', [HomeController::class, 'selectDailyPhoto']);
 Route::get('/mglHome', [HomeController::class, 'index']);

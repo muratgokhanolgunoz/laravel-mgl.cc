@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use Mail;
 
 header('Content-Type: application/json; charset=UTF-8');
 header('Access-Control-Allow-Methods: OPTIONS, GET, POST, PUT, DELETE');
@@ -19,6 +20,27 @@ class CareerController extends Controller
             'status' => 'success',
             'result' => $this->getJsonFile()
         ], 200);
+    }
+
+    private function sendEmail($array_) {
+        $company = "Midas Global Logistic";
+        $subject = "Career - Midas Global Logistic";
+
+        if($array_['language'] == 'tr') {
+            $company = "Midas Global Lojistik";
+            $subject = "Kariyer - Midas Global Lojistik";
+        }
+
+        $data = [
+            'name'    => $array_['name'],
+            'surname' => $array_['surname']
+        ];
+
+        Mail::send('email/mail_career_' . $array_['language'], $data, function($message) use ($array_, $company, $subject) {
+           $message->to($array_['to'], $company)
+                   ->subject($subject)
+                   ->from('no-reply@mgl.cc', $company);
+        });
     }
 
     public function add(Request $request_) {
@@ -41,15 +63,25 @@ class CareerController extends Controller
 
         array_push($file, $tempArray);
 
-        if(file_put_contents(public_path('assets/uploads/career/career.json'), json_encode($file, JSON_PRETTY_PRINT)))
+        if(file_put_contents(public_path('assets/uploads/career/career.json'), json_encode($file, JSON_PRETTY_PRINT))) {
+            $emailData = [
+                'name'     => $request_->name,
+                'surname'  => $request_->surname,
+                'to'       => $request_->email,
+                'language' => $request_->language
+            ];
+
+            $this->sendEmail($emailData);
             return response()->json([
                 'status' => 'success',
                 'result' => true
             ], 200);
-        else
+        } else
+        {
             return response()->json([
                 'status' => 'failed',
                 'result' => false
             ], 500);
+        }
     }
 }

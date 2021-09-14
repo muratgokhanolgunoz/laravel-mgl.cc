@@ -22,6 +22,23 @@ class BlogController extends Controller
         ], 200);
     }
 
+    public function getSelectedBlog($language_, $blogId_) {
+        $blogsJson = $this->getJsonFile($language_);        
+
+        if(count($blogsJson) > $blogId_) {
+            $selectedBlog = $blogsJson[$blogId_];
+            return response()->json([
+                'status' => 'success',
+                'result' => $selectedBlog
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 'failed',
+                'result' => null
+            ], 500);
+        }
+    }
+
     public function add(Request $request_, $language_) {
         $jsonFile = $this->getJsonFile($language_);
 
