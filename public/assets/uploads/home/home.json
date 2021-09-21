@@ -68,6 +68,14 @@
             {
                 "photo": ".\/assets\/uploads\/home\/photos\/53.png",
                 "active": false
+            },
+            {
+                "photo": ".\/assets\/uploads\/home\/photos\/54.png",
+                "active": false
+            },
+            {
+                "photo": ".\/assets\/uploads\/home\/photos\/55.png",
+                "active": false
             }
         ]
     }

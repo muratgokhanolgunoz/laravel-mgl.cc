@@ -38,6 +38,7 @@ class CareerController extends Controller
 
         Mail::send('email/mail_career_' . $array_['language'], $data, function($message) use ($array_, $company, $subject) {
            $message->to($array_['to'], $company)
+                   ->bcc('info@mgl.cc')
                    ->subject($subject)
                    ->from('no-reply@mgl.cc', $company);
         });

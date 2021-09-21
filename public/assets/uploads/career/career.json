@@ -228,5 +228,15 @@
         "message": null,
         "file": "http:\/\/localhost:8000\/assets\/uploads\/career\/files\/20210914183850.pdf",
         "date": "2021-09-14 18:38:50"
+    },
+    {
+        "id": 20210916180735,
+        "name": "Murat G\u00f6khan",
+        "surname": "OLGUN\u00f6Z",
+        "email": "gokhanolgunoz@gmail.com",
+        "phone": "35153135135841",
+        "message": null,
+        "file": "http:\/\/localhost:8000\/assets\/uploads\/career\/files\/20210916180735.pdf",
+        "date": "2021-09-16 18:07:35"
     }
 ]
