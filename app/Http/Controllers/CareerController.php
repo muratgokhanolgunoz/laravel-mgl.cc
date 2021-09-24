@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use Mail;
 
@@ -11,22 +12,25 @@ date_default_timezone_set('Europe/Istanbul');
 
 class CareerController extends Controller
 {
-    public function getJsonFile() {
-        return json_decode(file_get_contents(public_path('assets/uploads/career/career.json')));
+    private function getJsonFile()
+    {
+        return json_decode(file_get_contents(public_path('assets/mglUploads/career/career.json')));
     }
 
-    public function index() {
+    public function index()
+    {
         return response()->json([
             'status' => 'success',
             'result' => $this->getJsonFile()
         ], 200);
     }
 
-    private function sendEmail($array_) {
+    private function sendEmail($array_)
+    {
         $company = "Midas Global Logistic";
         $subject = "Career - Midas Global Logistic";
 
-        if($array_['language'] == 'tr') {
+        if ($array_['language'] == 'tr') {
             $company = "Midas Global Lojistik";
             $subject = "Kariyer - Midas Global Lojistik";
         }
@@ -36,35 +40,36 @@ class CareerController extends Controller
             'surname' => $array_['surname']
         ];
 
-        Mail::send('email/mail_career_' . $array_['language'], $data, function($message) use ($array_, $company, $subject) {
-           $message->to($array_['to'], $company)
-                   ->bcc('info@mgl.cc')
-                   ->subject($subject)
-                   ->from('no-reply@mgl.cc', $company);
+        Mail::send('email/mail_career_' . $array_['language'], $data, function ($message) use ($array_, $company, $subject) {
+            $message->to($array_['to'], $company)
+                ->bcc('info@mgl.cc')
+                ->subject($subject)
+                ->from('no-reply@mgl.cc', $company);
         });
     }
 
-    public function add(Request $request_) {
+    public function add(Request $request_)
+    {
         $file = $this->getJsonFile();
 
-        $fileName      = date('YmdHis');
+        $fileName      = date('YmdHis') . $this->generateRandomString();
         $fileExtension = $request_->file('file')->getClientOriginalExtension();
-        $fileUpload    = $request_->file('file')->move(public_path('assets/uploads/career/files'), $fileName . '.' . $fileExtension);
+        $fileUpload    = $request_->file('file')->move(public_path('assets/mglUploads/career/files'), $fileName . '.' . $fileExtension);
 
         $tempArray = [
-            'id'      => (int)$fileName,
+            'id'      => $fileName,
             'name'    => ucwords($request_->name),
             'surname' => strtoupper($request_->surname),
             'email'   => strtolower($request_->email),
             'phone'   => $request_->phone,
             'message' => $request_->message,
-            'file'    => 'http://localhost:8000/assets/uploads/career/files/' . $fileName . '.' . $fileExtension,
+            'file'    => 'http://localhost:8000/assets/mglUploads/career/files/' . $fileName . '.' . $fileExtension,
             'date'    => date('Y-m-d H:i:s')
         ];
 
         array_push($file, $tempArray);
 
-        if(file_put_contents(public_path('assets/uploads/career/career.json'), json_encode($file, JSON_PRETTY_PRINT))) {
+        if (file_put_contents(public_path('assets/mglUploads/career/career.json'), json_encode($file, JSON_PRETTY_PRINT))) {
             $emailData = [
                 'name'     => $request_->name,
                 'surname'  => $request_->surname,
@@ -77,8 +82,7 @@ class CareerController extends Controller
                 'status' => 'success',
                 'result' => true
             ], 200);
-        } else
-        {
+        } else {
             return response()->json([
                 'status' => 'failed',
                 'result' => false

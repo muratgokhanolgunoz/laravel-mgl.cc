@@ -28,53 +28,61 @@
     "photos": {
         "weekdays": [
             {
-                "photo": ".\/assets\/uploads\/home\/photos\/1.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/1.png",
                 "active": false
             },
             {
-                "photo": ".\/assets\/uploads\/home\/photos\/2.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/2.png",
                 "active": false
             },
             {
-                "photo": ".\/assets\/uploads\/home\/photos\/3.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/3.png",
                 "active": false
             },
             {
-                "photo": ".\/assets\/uploads\/home\/photos\/4.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/4.png",
                 "active": false
             },
             {
-                "photo": ".\/assets\/uploads\/home\/photos\/5.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/5.png",
                 "active": true
             },
             {
-                "photo": ".\/assets\/uploads\/home\/photos\/6.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/6.png",
+                "active": false
+            },
+            {
+                "photo": ".\/assets\/mglUploads\/home\/photos\/7.png",
+                "active": false
+            },
+            {
+                "photo": ".\/assets\/mglUploads\/home\/photos\/8.png",
                 "active": false
             }
         ],
         "weekends": [
             {
-                "photo": ".\/assets\/uploads\/home\/photos\/50.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/50.png",
                 "active": false
             },
             {
-                "photo": ".\/assets\/uploads\/home\/photos\/51.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/51.png",
                 "active": false
             },
             {
-                "photo": ".\/assets\/uploads\/home\/photos\/52.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/52.png",
                 "active": false
             },
             {
-                "photo": ".\/assets\/uploads\/home\/photos\/53.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/53.png",
                 "active": false
             },
             {
-                "photo": ".\/assets\/uploads\/home\/photos\/54.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/54.png",
                 "active": false
             },
             {
-                "photo": ".\/assets\/uploads\/home\/photos\/55.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/55.png",
                 "active": false
             }
         ]

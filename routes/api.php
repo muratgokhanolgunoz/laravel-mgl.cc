@@ -19,13 +19,17 @@ use App\Http\Controllers\GalleryController;
 |
 */
 
-Route::post('/blog/{language}/add', [BlogController::class, 'add'])->where('language', '[a-z]+');
-Route::post('/blog/{language}/delete', [BlogController::class, 'delete'])->where('language', '[a-z]+');
-Route::post('/career/add', [CareerController::class, 'add']);
-Route::get('/blog/{language}', [BlogController::class, 'index'])->where('language', '[a-z]+');
-Route::get('/blog/{language}/{id}', [BlogController::class, 'getSelectedBlog'])->where(['language' => '[a-z]+', 'id' => '[0-9]+']);
-Route::get('/career', [CareerController::class, 'index']);
-Route::get('/home/select', [HomeController::class, 'selectDailyPhoto']);
+Route::post('/mglBlog/add/{language}', [BlogController::class, 'add'])->where('language', '[a-z]+');
+Route::post('/mglBlog/delete/{language}', [BlogController::class, 'delete'])->where('language', '[a-z]+');
+Route::post('/mglBlog/update/{language}', [BlogController::class, 'update'])->where('language', '[a-z]+');
+Route::get('/mglBlog/{language}', [BlogController::class, 'index'])->where('language', '[a-z]+');
+Route::get('/mglBlog/{language}/{id}/', [BlogController::class, 'getSelectedBlog'])->where(['language' => '[a-z]+', 'id' => '[0-9]+']);
+
+Route::post('/mglCareer/add', [CareerController::class, 'add']);
+Route::get('/mglCareer', [CareerController::class, 'index']);
+
+Route::get('/mglHome/select', [HomeController::class, 'selectDailyPhoto']);
 Route::get('/mglHome', [HomeController::class, 'index']);
 Route::post('/mglLog', [HomeController::class, 'userLogs']);
-Route::get('{language}/getVideos', [GalleryController::class, 'index'])->where('language', '[a-z]+');
+
+Route::get('/mglGetVideos/{language}', [GalleryController::class, 'index'])->where('language', '[a-z]+');

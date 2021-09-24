@@ -1,0 +1,22 @@
+[
+    {
+        "id": "20210924121251RgP77qCNNSwEEZ0gvysB6eyXxCBNWlTAOMAlrdN4meMbpEf54t",
+        "name": "Murat G\u00f6khan",
+        "surname": "OLGUN\u00f6Z",
+        "email": "gokhanolgunoz@gmail.com",
+        "phone": "+90 (532) 219 63 16",
+        "message": null,
+        "file": "http:\/\/localhost:8000\/assets\/mglUploads\/career\/files\/20210924121251RgP77qCNNSwEEZ0gvysB6eyXxCBNWlTAOMAlrdN4meMbpEf54t.pdf",
+        "date": "2021-09-24 12:12:51"
+    },
+    {
+        "id": "20210924121451WtWgEqBpZEt0BnDvBj8VAcOHB2SwbANabSlQBLpYYu5lj84OXr",
+        "name": "Murat G\u00f6khan",
+        "surname": "OLGUN\u00f6Z",
+        "email": "gokhanolgunoz@gmail.com",
+        "phone": "+90 (532) 219 63 16",
+        "message": null,
+        "file": "http:\/\/localhost:8000\/assets\/mglUploads\/career\/files\/20210924121451WtWgEqBpZEt0BnDvBj8VAcOHB2SwbANabSlQBLpYYu5lj84OXr.pdf",
+        "date": "2021-09-24 12:14:51"
+    }
+]

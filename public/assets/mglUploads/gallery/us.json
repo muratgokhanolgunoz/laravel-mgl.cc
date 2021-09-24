@@ -1,0 +1,56 @@
+[
+    {
+        "id": 0,
+        "src": "",
+        "thumbnail": "",
+        "title": ""
+    },
+    {
+        "id": 1,
+        "src": "./assets/mglUploads/gallery/1/1.mp4",
+        "thumbnail": "./assets/mglUploads/gallery/1/1.jpg",
+        "title": "Why Dubai ?"
+    },
+    {
+        "id": 2,
+        "src": "./assets/mglUploads/gallery/2/2.mp4",
+        "thumbnail": "./assets/mglUploads/gallery/2/2.jpg",
+        "title": "Digital Freight Forwarders of Turkey"        
+    },
+    {
+        "id": 3,
+        "src": "./assets/mglUploads/gallery/3/3.mp4",
+        "thumbnail": "./assets/mglUploads/gallery/3/3.jpg",
+        "title": "Colombo Services"        
+    },
+    {
+        "id": 4,
+        "src": "./assets/mglUploads/gallery/4/4.mp4",
+        "thumbnail": "./assets/mglUploads/gallery/4/4.jpg",
+        "title": "Dangerous Goods Transportation and Class II Updates"        
+    },
+    {
+        "id": 5,
+        "src": "./assets/mglUploads/gallery/5/5.mp4",
+        "thumbnail": "./assets/mglUploads/gallery/5/5.jpg",
+        "title": "Original Bill of Lading and SWB"        
+    },
+    {
+        "id": 6,
+        "src": "./assets/mglUploads/gallery/6/6.mp4",
+        "thumbnail": "./assets/mglUploads/gallery/6/6.jpg",
+        "title": "Open Top Container and Brenda"        
+    },
+    {
+        "id": 7,
+        "src": "./assets/mglUploads/gallery/7/7.mp4",
+        "thumbnail": "./assets/mglUploads/gallery/7/7.jpg",
+        "title": "Currency Exchange Balance"        
+    },
+    {
+        "id": 8,
+        "src": "./assets/mglUploads/gallery/8/8.mp4",
+        "thumbnail": "./assets/mglUploads/gallery/8/8.jpg",
+        "title": "History of Midas Global Logistic"        
+    }
+]

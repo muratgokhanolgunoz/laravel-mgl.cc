@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 class GalleryController extends Controller
 {
     public function getJsonFile($language_) {
-        return json_decode(file_get_contents(public_path('assets/uploads/gallery/' . $language_ . '.json')));
+        return json_decode(file_get_contents(public_path('assets/mglUploads/gallery/' . $language_ . '.json')));
     }
 
     public function index($language_) {
