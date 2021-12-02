@@ -16,37 +16,57 @@ class BlogController extends Controller
         return json_decode(file_get_contents(public_path('assets/mglUploads/blog/' . $language_ . '.json')));
     }
 
-    public function index($language_)
-    {
-        return response()->json([
-            'status' => 'success',
-            'result' => $this->getJsonFile($language_)
-        ], 200);
+    public function index($language_, $itemsPerPage_ = 4, $page_ = 1) {  
+        $blogs = array_reverse($this->getJsonFile($language_));        
+        $result = [];
+        
+        $pagination = ceil(count($blogs) / $itemsPerPage_);
+        $requestPageEndPoint = $itemsPerPage_ * $page_;
+        
+        for ($i = $requestPageEndPoint - $itemsPerPage_; $i < $requestPageEndPoint; $i++) { 
+            if($i < count($blogs)) {
+                array_push($result, $blogs[$i]);  
+            }
+        }
+        
+        if($pagination >= $page_ || $pagination == 0) {
+           return response()->json([
+                'currentPage'  => (int)$page_,
+                'totalPage'    => (int)$pagination,            
+                'itemsPerPage' => (int)$itemsPerPage_,
+                'totalItem'    => (int)count($blogs), 
+                'result'       => $result
+            ], 200); 
+        } else {
+            return response()->json([
+                'message' => 'Invalid page number',
+                'result' => []
+            ], 400);
+        }  
     }
 
     public function getSelectedBlog($language_, $blogId_)
     {
         $blogsJson = $this->getJsonFile($language_);
-
-        if (count($blogsJson) > $blogId_) {
-            $selectedBlog = $blogsJson[$blogId_];
-            return response()->json([
-                'status' => 'success',
-                'result' => $selectedBlog
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => 'failed',
-                'result' => null
-            ], 500);
+        
+        foreach ($blogsJson as $key => $value) {
+            if($value->BLOG_SECTION_ITEMS_ID == $blogId_) {
+                return response()->json([
+                    'result' => $blogsJson[$key]
+                ], 200);                    
+            }
         }
+
+        return response()->json([
+            'message' => 'Invalid id',
+            'result' => null
+        ], 400);   
     }
 
     public function add(Request $request_, $language_)
     {
         $jsonFile = $this->getJsonFile($language_);
-
-        $fileName = date('YmdHis') . $this->generateRandomString();
+        $fileName = $this->generateRandomString();
 
         $thumbnailName      = $fileName . '_thumbnail';
         $thumbnailExtension = $request_->file('thumbnail')->getClientOriginalExtension();
@@ -57,7 +77,7 @@ class BlogController extends Controller
         $photoUpload    = $request_->file('photo')->move(public_path('assets/mglUploads/blog/files/' . $fileName), $photoName . '.' . $photoExtension);
 
         $tempArray = [
-            'BLOG_SECTION_ITEMS_ID'          => (int)$fileName,
+            'BLOG_SECTION_ITEMS_ID'          => count($jsonFile) > 0 ? $jsonFile[count($jsonFile) - 1]->BLOG_SECTION_ITEMS_ID + 1 : 1,
             'BLOG_SECTION_ITEMS_FOLDER_NAME' => $fileName,
             'BLOG_SECTION_ITEMS_THUMBNAIL'   => 'http://localhost:8000/assets/mglUploads/blog/files/' . $fileName . '/' . $thumbnailName . '.' . $thumbnailExtension,
             'BLOG_SECTION_ITEMS_PHOTO'       => 'http://localhost:8000/assets/mglUploads/blog/files/' . $fileName . '/' . $photoName . '.' . $photoExtension,
@@ -72,12 +92,10 @@ class BlogController extends Controller
 
         if (file_put_contents(public_path('assets/mglUploads/blog/' . $language_ . '.json'), json_encode($jsonFile, JSON_PRETTY_PRINT)))
             return response()->json([
-                'status' => 'success',
                 'result' => true
             ], 200);
         else
             return response()->json([
-                'status' => 'failed',
                 'result' => false
             ], 500);
     }
@@ -87,9 +105,11 @@ class BlogController extends Controller
         $jsonFile  = $this->getJsonFile($language_);
         $blogItems = $jsonFile;
         $jsonFile = [];
+        $findBlog = false;
 
         foreach ($blogItems as $key => $value) {
             if ($request_->id != $value->BLOG_SECTION_ITEMS_ID) {
+                $findBlog = false;
                 $tempArray = [
                     'BLOG_SECTION_ITEMS_ID'          => (int)$value->BLOG_SECTION_ITEMS_ID,
                     'BLOG_SECTION_ITEMS_FOLDER_NAME' => $value->BLOG_SECTION_ITEMS_FOLDER_NAME,
@@ -105,12 +125,16 @@ class BlogController extends Controller
                 array_push($jsonFile, $tempArray);
                 $tempArray = [];
             } else {
-                if (file_exists(public_path('assets/mglUploads/blog/files/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_thumbnail.' . explode('.', $value->BLOG_SECTION_ITEMS_THUMBNAIL)[1]))) {
-                    unlink(public_path('assets/mglUploads/blog/files/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_thumbnail.' . explode('.', $value->BLOG_SECTION_ITEMS_THUMBNAIL)[1]));
+                $findBlog = true;
+                $explodeThumbnail = explode('.', $value->BLOG_SECTION_ITEMS_THUMBNAIL);
+                $explodePhoto = explode('.', $value->BLOG_SECTION_ITEMS_PHOTO);
+
+                if (file_exists(public_path('assets/mglUploads/blog/files/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_thumbnail.' . $explodeThumbnail[count($explodeThumbnail) - 1]))) {
+                    unlink(public_path('assets/mglUploads/blog/files/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_thumbnail.' . $explodeThumbnail[count($explodeThumbnail) - 1]));
                 }
 
-                if (file_exists(public_path('assets/mglUploads/blog/files/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_photo.' . explode('.', $value->BLOG_SECTION_ITEMS_PHOTO)[1]))) {
-                    unlink(public_path('assets/mglUploads/blog/files/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_photo.' . explode('.', $value->BLOG_SECTION_ITEMS_PHOTO)[1]));
+                if (file_exists(public_path('assets/mglUploads/blog/files/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_photo.' . $explodePhoto[count($explodePhoto) - 1]))) {
+                    unlink(public_path('assets/mglUploads/blog/files/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_photo.' . $explodePhoto[count($explodePhoto) - 1]));
                 }
 
                 if (is_dir(public_path('assets/mglUploads/blog/files/'  . $value->BLOG_SECTION_ITEMS_FOLDER_NAME))) {
@@ -119,16 +143,21 @@ class BlogController extends Controller
             }
         }
 
-        if (file_put_contents(public_path('assets/mglUploads/blog/' . $language_ . '.json'), json_encode($jsonFile, JSON_PRETTY_PRINT)))
+        if($findBlog) {
+            if (file_put_contents(public_path('assets/mglUploads/blog/' . $language_ . '.json'), json_encode($jsonFile, JSON_PRETTY_PRINT))) {
+                return response()->json([
+                    'result' => true
+                ], 200);
+            } else {
+                return response()->json([
+                    'result' => false
+                ], 500);
+            }                
+        } else {
             return response()->json([
-                'status' => 'success',
-                'result' => true
-            ], 200);
-        else
-            return response()->json([
-                'status' => 'failed',
                 'result' => false
-            ], 500);
+            ], 404);
+        }            
     }
 
     public function update(Request $request_, $language_)
@@ -152,8 +181,10 @@ class BlogController extends Controller
                 ];
             } else {
                 if ($request_->thumbnail) {
-                    if (file_exists(public_path('assets/mglUploads/blog/files/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_thumbnail.' . explode('.', $value->BLOG_SECTION_ITEMS_THUMBNAIL)[1]))) {
-                        unlink(public_path('assets/mglUploads/blog/files/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_thumbnail.' . explode('.', $value->BLOG_SECTION_ITEMS_THUMBNAIL)[1]));
+                    $explodeThumbnail = explode('.', $value->BLOG_SECTION_ITEMS_THUMBNAIL);
+
+                    if (file_exists(public_path('assets/mglUploads/blog/files/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_thumbnail.' . $explodeThumbnail[count($explodeThumbnail) - 1]))) {
+                        unlink(public_path('assets/mglUploads/blog/files/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_thumbnail.' . $explodeThumbnail[count($explodeThumbnail) - 1]));
                     }
 
                     $thumbnailName      = $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_thumbnail';
@@ -162,8 +193,10 @@ class BlogController extends Controller
                 }
 
                 if ($request_->photo) {
-                    if (file_exists(public_path('assets/mglUploads/blog/files/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_photo.' . explode('.', $value->BLOG_SECTION_ITEMS_PHOTO)[1]))) {
-                        unlink(public_path('assets/mglUploads/blog/files/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_photo.' . explode('.', $value->BLOG_SECTION_ITEMS_PHOTO)[1]));
+                    $explodePhoto = explode('.', $value->BLOG_SECTION_ITEMS_PHOTO);
+
+                    if (file_exists(public_path('assets/mglUploads/blog/files/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_photo.' . $explodePhoto[count($explodePhoto) - 1]))) {
+                        unlink(public_path('assets/mglUploads/blog/files/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '/' . $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_photo.' . $explodePhoto[count($explodePhoto) - 1]));
                     }
 
                     $photoName      = $value->BLOG_SECTION_ITEMS_FOLDER_NAME . '_photo';
@@ -190,12 +223,10 @@ class BlogController extends Controller
 
         if (file_put_contents(public_path('assets/mglUploads/blog/' . $language_ . '.json'), json_encode($jsonFile, JSON_PRETTY_PRINT)))
             return response()->json([
-                'status' => 'success',
                 'result' => true
             ], 200);
         else
             return response()->json([
-                'status' => 'failed',
                 'result' => false
             ], 500);
     }

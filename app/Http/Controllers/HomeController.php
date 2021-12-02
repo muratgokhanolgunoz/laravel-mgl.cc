@@ -60,7 +60,6 @@ class HomeController extends Controller
         ];
             
         return response()->json([
-            'status' => 'success',
             'result' => $result
         ]);
     }
@@ -79,12 +78,10 @@ class HomeController extends Controller
 
         if(file_put_contents(public_path('assets/mglUploads/home/home.json'), json_encode($jsonFile, JSON_PRETTY_PRINT)) == TRUE)
             return response()->json([
-                'status' => 'success',
                 'result' => true
             ]);
         else 
             return response()->json([
-                'status' => 'failed',
                 'result' => false
             ]);
     }
