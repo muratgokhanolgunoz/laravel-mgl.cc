@@ -7,6 +7,7 @@ use App\Http\Controllers;
 use Log;
 
 header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: OPTIONS, GET, POST, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 date_default_timezone_set('Europe/Istanbul');
 
@@ -77,8 +78,6 @@ class BlogController extends Controller
 
     public function add(Request $request_, $language_)
     {
-        header("Access-Control-Allow-Methods: POST");
-
         $jsonFile = $this->getJsonFile($language_);
         $fileName = $this->generateRandomString();
 
@@ -119,8 +118,6 @@ class BlogController extends Controller
 
     public function delete(Request $request_, $language_)
     {
-        header("Access-Control-Allow-Methods: DELETE");
-
         $jsonFile  = $this->getJsonFile($language_);
         $blogItems = $jsonFile;
         $jsonFile = [];
@@ -181,8 +178,6 @@ class BlogController extends Controller
 
     public function update(Request $request_, $language_)
     {
-        header("Access-Control-Allow-Methods: UPDATE");
-
         $jsonFile  = $this->getJsonFile($language_);
         $blogItems = $jsonFile;
         $jsonFile = [];
