@@ -60,7 +60,6 @@ class HomeController extends Controller
         ];
             
         return response()->json([
-            'status' => 'success',
             'result' => $result
         ]);
     }
@@ -79,12 +78,10 @@ class HomeController extends Controller
 
         if(file_put_contents(public_path('assets/mglUploads/home/home.json'), json_encode($jsonFile, JSON_PRETTY_PRINT)) == TRUE)
             return response()->json([
-                'status' => 'success',
                 'result' => true
             ]);
         else 
             return response()->json([
-                'status' => 'failed',
                 'result' => false
             ]);
     }
@@ -103,9 +100,8 @@ class HomeController extends Controller
         file_put_contents(public_path('assets/mglUploads/home/home.json'), json_encode($jsonFile, JSON_PRETTY_PRINT));
     }
 
-    private function getLocationTimezoneOnIp() {        
-        $ip = '94.55.209.135';
-        // $ip = $_SERVER['REMOTE_ADDR'];
+    private function getLocationTimezoneOnIp() {       
+        $ip = $_SERVER['REMOTE_ADDR'];
         $ipInfo = file_get_contents('http://ip-api.com/json/' . $ip);
         $ipInfo = json_decode($ipInfo);
     

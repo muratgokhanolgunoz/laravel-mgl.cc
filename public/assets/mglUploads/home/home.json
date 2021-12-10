@@ -28,61 +28,61 @@
     "photos": {
         "weekdays": [
             {
-                "photo": ".\/assets\/mglUploads\/home\/photos\/1.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/1.webp",
                 "active": false
             },
             {
-                "photo": ".\/assets\/mglUploads\/home\/photos\/2.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/2.webp",
                 "active": false
             },
             {
-                "photo": ".\/assets\/mglUploads\/home\/photos\/3.png",
-                "active": false
-            },
-            {
-                "photo": ".\/assets\/mglUploads\/home\/photos\/4.png",
-                "active": false
-            },
-            {
-                "photo": ".\/assets\/mglUploads\/home\/photos\/5.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/3.webp",
                 "active": true
             },
             {
-                "photo": ".\/assets\/mglUploads\/home\/photos\/6.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/4.webp",
                 "active": false
             },
             {
-                "photo": ".\/assets\/mglUploads\/home\/photos\/7.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/5.webp",
                 "active": false
             },
             {
-                "photo": ".\/assets\/mglUploads\/home\/photos\/8.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/6.webp",
+                "active": false
+            },
+            {
+                "photo": ".\/assets\/mglUploads\/home\/photos\/7.webp",
+                "active": false
+            },
+            {
+                "photo": ".\/assets\/mglUploads\/home\/photos\/8.webp",
                 "active": false
             }
         ],
         "weekends": [
             {
-                "photo": ".\/assets\/mglUploads\/home\/photos\/50.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/50.webp",
                 "active": false
             },
             {
-                "photo": ".\/assets\/mglUploads\/home\/photos\/51.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/51.webp",
                 "active": false
             },
             {
-                "photo": ".\/assets\/mglUploads\/home\/photos\/52.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/52.webp",
                 "active": false
             },
             {
-                "photo": ".\/assets\/mglUploads\/home\/photos\/53.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/53.webp",
                 "active": false
             },
             {
-                "photo": ".\/assets\/mglUploads\/home\/photos\/54.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/54.webp",
                 "active": false
             },
             {
-                "photo": ".\/assets\/mglUploads\/home\/photos\/55.png",
+                "photo": ".\/assets\/mglUploads\/home\/photos\/55.webp",
                 "active": false
             }
         ]

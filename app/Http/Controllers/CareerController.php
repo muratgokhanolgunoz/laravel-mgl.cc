@@ -20,7 +20,6 @@ class CareerController extends Controller
     public function index()
     {
         return response()->json([
-            'status' => 'success',
             'result' => $this->getJsonFile()
         ], 200);
     }
@@ -52,19 +51,21 @@ class CareerController extends Controller
     {
         $file = $this->getJsonFile();
 
-        $fileName      = date('YmdHis') . $this->generateRandomString();
+        $fileName      = $this->generateRandomString();
         $fileExtension = $request_->file('file')->getClientOriginalExtension();
         $fileUpload    = $request_->file('file')->move(public_path('assets/mglUploads/career/files'), $fileName . '.' . $fileExtension);
 
         $tempArray = [
-            'id'      => $fileName,
-            'name'    => ucwords($request_->name),
-            'surname' => strtoupper($request_->surname),
-            'email'   => strtolower($request_->email),
-            'phone'   => $request_->phone,
-            'message' => $request_->message,
-            'file'    => 'http://localhost:8000/assets/mglUploads/career/files/' . $fileName . '.' . $fileExtension,
-            'date'    => date('Y-m-d H:i:s')
+            'id'        => count($file) > 0 ? $file[count($file) - 1]->id + 1 : 1,
+            'name'      => ucwords($request_->name),
+            'surname'   => strtoupper($request_->surname),
+            'email'     => strtolower($request_->email),
+            'phone'     => $request_->phone,
+            'message'   => $request_->message,
+            "filename"  => $fileName,
+            "extension" => $fileExtension,
+            'location'  => 'http://127.0.0.1:8000/api/assets/mglUploads/career/files/' . $fileName . '.' . $fileExtension,
+            'date'      => date('Y-m-d H:i:s')
         ];
 
         array_push($file, $tempArray);
@@ -79,14 +80,62 @@ class CareerController extends Controller
 
             $this->sendEmail($emailData);
             return response()->json([
-                'status' => 'success',
                 'result' => true
             ], 200);
         } else {
             return response()->json([
-                'status' => 'failed',
                 'result' => false
             ], 500);
         }
+    }
+
+    public function delete(Request $request_) {
+        $jsonFile  = $this->getJsonFile();
+        $careerItems = $jsonFile;
+        $jsonFile = [];
+        $findCareer = false;
+
+        foreach ($careerItems as $key => $value) {
+            if ($request_->id != $value->id) {
+                $tempArray = [
+                    'id'        => $value->id,
+                    'name'      => $value->name,
+                    'surname'   => $value->surname,
+                    'email'     => $value->email,
+                    'phone'     => $value->phone,
+                    'message'   => $value->message,
+                    "filename"  => $value->filename,
+                    "extension" => $value->extension,
+                    'location'  => $value->location,
+                    'date'      => $value->date
+                ];
+
+                array_push($jsonFile, $tempArray);
+                $tempArray = [];
+            } else {
+                $findCareer = true;
+
+                if (file_exists(public_path('assets/mglUploads/career/files/' . $value->filename . '.' . $value->extension))) {
+                    unlink(public_path('assets/mglUploads/career/files/' . $value->filename . '.' . $value->extension));
+                }
+            }
+        }    
+
+        if($findCareer == true) {
+            if (file_put_contents(public_path('assets/mglUploads/career/career.json'), json_encode($jsonFile, JSON_PRETTY_PRINT))) {
+                return response()->json([
+                    'result' => true
+                ], 200);
+            } else {
+                return response()->json([
+                    'result' => false
+                ], 500);
+            }                
+        } else {
+            return response()->json([
+                'message' => "Invalid id",
+                'result' => false
+            ], 400);
+        }  
     }
 }
