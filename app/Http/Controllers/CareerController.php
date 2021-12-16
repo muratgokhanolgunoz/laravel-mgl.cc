@@ -20,7 +20,7 @@ class CareerController extends Controller
     public function index()
     {
         return response()->json([
-            'result' => $this->getJsonFile()
+            'result' => array_reverse($this->getJsonFile())
         ], 200);
     }
 
@@ -64,7 +64,7 @@ class CareerController extends Controller
             'message'   => $request_->message,
             "filename"  => $fileName,
             "extension" => $fileExtension,
-            'location'  => 'http://127.0.0.1:8000/api/assets/mglUploads/career/files/' . $fileName . '.' . $fileExtension,
+            'location'  => 'http://127.0.0.1:8000/assets/mglUploads/career/files/' . $fileName . '.' . $fileExtension,
             'date'      => date('Y-m-d H:i:s')
         ];
 
