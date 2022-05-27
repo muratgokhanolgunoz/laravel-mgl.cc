@@ -37,7 +37,7 @@
             },
             {
                 "photo": ".\/assets\/mglUploads\/home\/photos\/3.webp",
-                "active": true
+                "active": false
             },
             {
                 "photo": ".\/assets\/mglUploads\/home\/photos\/4.webp",
@@ -57,6 +57,18 @@
             },
             {
                 "photo": ".\/assets\/mglUploads\/home\/photos\/8.webp",
+                "active": false
+            },
+            {
+                "photo": ".\/assets\/mglUploads\/home\/photos\/9.webp",
+                "active": false
+            },
+            {
+                "photo": ".\/assets\/mglUploads\/home\/photos\/10.webp",
+                "active": true
+            },
+            {
+                "photo": ".\/assets\/mglUploads\/home\/photos\/11.webp",
                 "active": false
             }
         ],
@@ -83,6 +95,18 @@
             },
             {
                 "photo": ".\/assets\/mglUploads\/home\/photos\/55.webp",
+                "active": false
+            },
+            {
+                "photo": ".\/assets\/mglUploads\/home\/photos\/56.webp",
+                "active": false
+            },
+            {
+                "photo": ".\/assets\/mglUploads\/home\/photos\/57.webp",
+                "active": false
+            },
+            {
+                "photo": ".\/assets\/mglUploads\/home\/photos\/58.webp",
                 "active": false
             }
         ]
